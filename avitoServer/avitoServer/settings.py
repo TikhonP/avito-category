@@ -25,7 +25,9 @@ SECRET_KEY = 'z-9j6fzvuhnr6lxyabg5!-s$9)wdg9+fo=kak2)41d7)(z(7$l'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'tikhon.zapto.org'
+]
 
 
 # Application definition

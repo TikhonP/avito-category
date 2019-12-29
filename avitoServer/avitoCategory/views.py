@@ -56,22 +56,22 @@ class ModelNN(nn.Module):
         return x
 
 
-udpipe_filename = '/Users/tikhon/Desktop/ml avito/udpipe_syntagrus.model'
+udpipe_filename = '/Users/viktorpetrisev/Desktop/avito-category/avitoServer/avitoCategory/static/udpipe_syntagrus.model'
 modell = Mod.load(udpipe_filename)
 process_pipeline = Pipeline(modell, 'tokenize', Pipeline.DEFAULT, Pipeline.DEFAULT, 'conllu')
 
-model_file = '/Users/tikhon/Desktop/CHOK/prog-Y/data/182.zip'
+model_file = '/Users/viktorpetrisev/Desktop/avito-category/avitoServer/avitoCategory/static/182.zip'
 with zipfile.ZipFile(model_file, 'r') as archive:
     stream = archive.open('model.bin')
     model = models.KeyedVectors.load_word2vec_format(stream, binary=True)
 w2v = dict(zip(model.wv.index2word, model.wv.syn0))
 
-nn_file = '/Users/tikhon/Desktop/ml avito/last_model'
+nn_file = '/Users/viktorpetrisev/Desktop/avito-category/avitoServer/avitoCategory/static/last_model'
 model1 = ModelNN(601, 54, [328, 328], p=0.4)
 model1.load_state_dict(torch.load(nn_file))
 model1.eval()
 
-cats_path = '/Users/tikhon/Desktop/ml avito/avito_category.csv'
+cats_path = '/Users/viktorpetrisev/Desktop/avito-category/avitoServer/avitoCategory/static/avito_category.csv'
 cat_descr = pd.read_csv(cats_path)
 dat = (dict(zip(cat_descr.category_id, cat_descr.name)))
 
@@ -110,7 +110,7 @@ def parser(link):
     soup = zbs(requests.get(link).text, 'html.parser')
     title = soup.find('span', {'class': 'title-info-title-text'}).text
     description = []
-    for i in soup.find('div', {'class': 'item-description-text'}).find_all('p'):
+    for i in soup.find('div', {'itemprop': 'description'}).find_all('p'):
         description.append(i.text)
     description = "\n".join(description)
     price = soup.find('span', {'class': 'js-item-price'})
