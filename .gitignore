@@ -1,2 +1,6 @@
 # delete all .DS_Store
 .DS_Store*
+
+/avitoServer/model_files/182.zip
+
+/avitoServer/model_files/udpipe_syntagrus.model

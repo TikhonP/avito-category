@@ -14,6 +14,7 @@ import torch.nn as nn
 import numpy as np
 from bs4 import BeautifulSoup as zbs
 import requests
+from django.conf import settings
 
 
 class ModelNN(nn.Module):
@@ -55,23 +56,24 @@ class ModelNN(nn.Module):
         x = self.layers(x)
         return x
 
+base_dir = settings.BASE_DIR 
 
-udpipe_filename = '/Users/viktorpetrisev/Desktop/avito-category/avitoServer/avitoCategory/static/udpipe_syntagrus.model'
+udpipe_filename = os.path.join(base_dir, 'model_files/udpipe_syntagrus.model')
 modell = Mod.load(udpipe_filename)
 process_pipeline = Pipeline(modell, 'tokenize', Pipeline.DEFAULT, Pipeline.DEFAULT, 'conllu')
 
-model_file = '/Users/viktorpetrisev/Desktop/avito-category/avitoServer/avitoCategory/static/182.zip'
+model_file = os.path.join(base_dir, 'model_files/182.zip')
 with zipfile.ZipFile(model_file, 'r') as archive:
     stream = archive.open('model.bin')
     model = models.KeyedVectors.load_word2vec_format(stream, binary=True)
 w2v = dict(zip(model.wv.index2word, model.wv.syn0))
 
-nn_file = '/Users/viktorpetrisev/Desktop/avito-category/avitoServer/avitoCategory/static/last_model'
+nn_file = os.path.join(base_dir, 'model_files/last_model')
 model1 = ModelNN(601, 54, [328, 328], p=0.4)
 model1.load_state_dict(torch.load(nn_file))
 model1.eval()
 
-cats_path = '/Users/viktorpetrisev/Desktop/avito-category/avitoServer/avitoCategory/static/avito_category.csv'
+cats_path = os.path.join(base_dir, 'model_files/avito_category.csv')
 cat_descr = pd.read_csv(cats_path)
 dat = (dict(zip(cat_descr.category_id, cat_descr.name)))
 
